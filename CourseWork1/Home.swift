@@ -26,7 +26,7 @@ struct Home: View {
                         ForecastListView(forecasts: weatherService.dailyForecasts)
                         
                         HStack {
-                            HomeCards(value: Int(weatherData.main.feelsLike), symbol: "°", title: "FEELS LIKE", description: "It is very sunny that no one wanrts to go out", icon: "thermometer")
+                            HomeCards(value: Int(weatherData.main.feelsLike), symbol: "°", title: "FEELS LIKE", description: "It is very sunny that no one wants to go out", icon: "thermometer")
                             HomeCards(value: weatherData.main.humidity, symbol: "%", title: "HUMIDITY", description: "", icon: "humidity.fill")
                         }
                         
@@ -36,6 +36,8 @@ struct Home: View {
                         }
                         
                         WindCard()
+                        
+                        AirQualityCard()
                         
                         Spacer()
                     }
@@ -56,7 +58,9 @@ struct Home: View {
             weatherService.fetchWeather(for: city)
             weatherService.fetchForecast(for: city)
         }
+        .padding(EdgeInsets(top: 100, leading:0, bottom: 100, trailing: 0))
     }
+    
 }
 
 #Preview {
@@ -200,5 +204,7 @@ struct WindCard: View {
         .background(Color.blue.opacity(0.2), in: RoundedRectangle(cornerRadius: 20))
     }
 }
+
+
 
 
