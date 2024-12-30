@@ -26,7 +26,7 @@ struct Home: View {
                         ForecastListView(forecasts: weatherService.dailyForecasts)
                         
                         HStack {
-                            HomeCards(value: Int(weatherData.main.feelsLike), symbol: "°", title: "FEELS LIKE", description: "It is very sunny that no one wanrts to go out", icon: "thermometer")
+                            HomeCards(value: Int(weatherData.main.feelsLike), symbol: "°", title: "FEELS LIKE", description: "It is very sunny that no one wants to go out", icon: "thermometer")
                             HomeCards(value: weatherData.main.humidity, symbol: "%", title: "HUMIDITY", description: "", icon: "humidity.fill")
                         }
                         
