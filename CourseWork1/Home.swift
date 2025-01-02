@@ -23,6 +23,8 @@ struct Home: View {
                     VStack {
                         TitleDesc(weatherData: weatherData)
                         
+                        
+                        
                         ForecastListView(forecasts: weatherService.dailyForecasts)
                         
                         HStack {
@@ -98,7 +100,6 @@ struct HomeCards: View {
 }
 
 struct TitleDesc: View {
-    @StateObject private var weatherService = WeatherService()
     let weatherData: WeatherData
     
     var body: some View {

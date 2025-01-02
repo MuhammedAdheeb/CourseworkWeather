@@ -8,11 +8,26 @@
 import SwiftUI
 
 struct HourlyForecastView: View {
+    
+    @State var hour : Int
+    @State var hourTemp : Double
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack{
+            Text("\(hour)")
+                .font(.headline)
+            Image(systemName: "cloud.fill")
+            Text("\(hourTemp)")
+                .font(.title2)
+                .fontWeight(.bold)
+        }
+        .foregroundStyle(.white)
+        .padding()
+        .background(Color.blue.opacity(0.2))
+        .clipShape(RoundedRectangle(cornerRadius: 20))
+        .padding(.horizontal)
     }
 }
 
 #Preview {
-    HourlyForecastView()
+    HourlyForecastView(hour: 19, hourTemp: 95.0)
 }

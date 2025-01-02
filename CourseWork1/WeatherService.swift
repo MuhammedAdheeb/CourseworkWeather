@@ -6,12 +6,14 @@
 //
 
 import Foundation
+import CoreLocation
 	
 class WeatherService: ObservableObject {
     private let apiKey = "11c775dc12a86bafecaffc9fb6bf51f1"
     @Published var weatherData: WeatherData?
     @Published var errorMessage: String?
     @Published var dailyForecasts: [DailyForecast] = []
+    @Published var weatherDataModel : WeatherDataModel?
     
     func fetchWeather(for city: String) {
         let urlString = "https://api.openweathermap.org/data/2.5/weather?q=\(city)&appid=\(apiKey)&units=metric"
@@ -99,6 +101,54 @@ class WeatherService: ObservableObject {
             
             self.dailyForecasts = dailyForecasts
         }
+    
+    
+    
+    func fetchWeatherData(for coordinates: CLLocationCoordinate2D) async {
+            let lat = coordinates.latitude
+            let long = coordinates.longitude
+            guard let url = URL(string: "https://api.openweathermap.org/data/3.0/onecall?lat=\(lat)&lon=\(long)&exclude=minutely&appid=12c7d131fd382201484758ccebfaeb8d") else {
+                print("Ivalid URL")
+                return
+            }
+            print("-----------------works-------------------")
+            
+            do {
+                let (data, response) = try await URLSession.shared.data(from: url)
+                guard let httpResponse = response as? HTTPURLResponse else {
+                    print("Invalid response")
+                    return
+                }
+                
+                guard httpResponse.statusCode == 200 else {
+                    print("Invalid response code")
+                    return
+                }
+                
+                let decodedData = try JSONDecoder().decode(WeatherDataModel.self, from: data)
+                
+                DispatchQueue.main.async {
+                    self.weatherDataModel = decodedData
+                }
+            } catch let decodingError as DecodingError {
+                switch decodingError {
+                case .keyNotFound(let key, let context):
+                    print("Key '\(key.stringValue)' not found:", context.debugDescription)
+                case .typeMismatch(let type, let context):
+                    print("Type mismatch for type '\(type)':", context.debugDescription)
+                case .valueNotFound(let type, let context):
+                    print("Value not found for type '\(type)':", context.debugDescription)
+                case .dataCorrupted(let context):
+                    print("Data corrupted:", context.debugDescription)
+                default:
+                    print("Decoding error:", decodingError.localizedDescription)
+                }
+            } catch {
+                print("General error:", error.localizedDescription)
+            }
+        }
+        
+         
 }
 
 struct DailyForecast: Identifiable {
